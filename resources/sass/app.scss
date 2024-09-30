@@ -6,3 +6,25 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+.card {
+    border: 1px;
+
+    &:hover {
+        cursor: pointer;
+        background: rgb(211 233 255 / 22%);
+    }
+}
+.ellipsis {
+    white-space: nowrap;        /* Prevent text wrapping */
+    overflow: hidden;           /* Hide overflowing text */
+    text-overflow: ellipsis;    /* Add the ellipsis (...) */
+    //width: 100px;               /* Define a specific width */
+}
+.dropdown-menu {
+    z-index: 1050; /* Bootstrap dropdown default z-index */
+}
+
+.dropdown-menu.show {
+    z-index: 9999; /* Ensure it's above other elements */
+}

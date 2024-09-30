@@ -2,63 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CreateOrUpdateTaskRequest;
+use App\Http\Requests\DeleteTaskRequest;
+use App\Http\Requests\TaskRequest;
+use App\Models\Project;
+use App\Models\Task;
+use App\Services\TaskService;
+use Illuminate\Http\JsonResponse;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function __construct(private TaskService $taskService)
     {
-        //
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @param CreateOrUpdateTaskRequest $request
+     * @return JsonResponse
      */
-    public function create()
+    public function store(CreateOrUpdateTaskRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        try {
+            $this->taskService->store($request->toDto());
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(DeleteTaskRequest $request)
     {
-        //
+        return response()->json(Task::query()->find($request->task_id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CreateOrUpdateTaskRequest $request)
     {
-        //
+        try {
+            $this->taskService->update($request->toDto());
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+
+    }
+
+    public function updateStatus(TaskRequest $request, Project $project, Task $task)
+    {
+        try {
+            $task->update(['status' => $request->status]);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param DeleteTaskRequest $request
+     * @return JsonResponse
      */
-    public function destroy(string $id)
+    public function destroy(DeleteTaskRequest $request)
     {
-        //
+        Task::query()->find($request->task_id)->delete();
+        return response()->json(['success' => true]);
     }
 }
