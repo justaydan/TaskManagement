@@ -49,7 +49,14 @@ docker exec -it task_management php artisan migrate
 
 ```
 
-### Step 6: Access the Application
+### Step 6: Run Npm
+Via Running npm run dev should be able to see your frontend changes live:
+```bash
+docker exec -it task_management npm run dev
+
+```
+
+### Step 7: Access the Application
 After the containers are up and running, you can access the application in your browser at:
 
 ```bash
