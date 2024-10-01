@@ -36,7 +36,7 @@ class TaskController extends Controller
      */
     public function edit(DeleteTaskRequest $request)
     {
-        return response()->json($this->taskService->get($request->task_id));
+        return response()->json($this->taskService->find($request->task_id));
     }
 
     /**

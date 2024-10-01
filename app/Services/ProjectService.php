@@ -38,4 +38,9 @@ class ProjectService
     {
         return Project::query()->find($projectId);
     }
+
+    public function get()
+    {
+        return auth()->user()->projects()->get();
+    }
 }

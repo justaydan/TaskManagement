@@ -30,7 +30,7 @@ class TaskService
         Task::query()->find($taskId)->delete();
     }
 
-    public function get(int $taskId)
+    public function find(int $taskId)
     {
         return Task::query()->find($taskId);
     }
