@@ -21,13 +21,13 @@ class TaskService
 
     public function update(int $taskId, array $data)
     {
-        Task::query()->find($taskId)
+        $this->find($taskId)
             ->update($data);
     }
 
     public function delete(int $taskId)
     {
-        Task::query()->find($taskId)->delete();
+        $this->find($taskId)->delete();
     }
 
     public function find(int $taskId)

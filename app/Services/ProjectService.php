@@ -18,7 +18,7 @@ class ProjectService
 
     public function update(ProjectDto $dto)
     {
-        Project::query()->find($dto->getProjectId())->update([
+        $this->findProject($dto->getProjectId())->update([
             'name' => $dto->getName(),
             'description' => $dto->getDescription()
         ]);
@@ -26,12 +26,12 @@ class ProjectService
 
     public function getTasks(int $projectId)
     {
-        return Project::query()->find($projectId)->load('tasks');
+        return $this->findProject($projectId)->load('tasks');
     }
 
     public function delete(int $projectId)
     {
-        Project::query()->find($projectId)->delete();
+        $this->findProject($projectId)->delete();
     }
 
     public function findProject(int $projectId)
