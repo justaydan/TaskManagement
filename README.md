@@ -39,13 +39,13 @@ Docker Compose will set up the web server, PHP, and MySQL containers for you.
 ### Step 4: Install Dependencies
 After the containers are running, you'll need to install the project dependencies. You can do this by running the following command inside the web container:
 ```bash
-docker-compose exec task_management composer install
+docker exec -it task_management composer install
 ```
 
 ### Step 5: Run Migrations
 Run Laravel migrations to set up the database schema:
 ```bash
-docker-compose exec task_management php artisan migrate
+docker exec -it task_management php artisan migrate
 
 ```
 
