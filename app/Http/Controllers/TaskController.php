@@ -36,7 +36,7 @@ class TaskController extends Controller
      */
     public function edit(DeleteTaskRequest $request)
     {
-        return response()->json(Task::query()->find($request->task_id));
+        return response()->json($this->taskService->get($request->task_id));
     }
 
     /**
@@ -45,7 +45,11 @@ class TaskController extends Controller
     public function update(CreateOrUpdateTaskRequest $request)
     {
         try {
-            $this->taskService->update($request->toDto());
+            $dto = $request->toDto();
+            $this->taskService->update($dto->getTaskId(), [
+                'name' => $dto->getName(),
+                'description' => $dto->getDescription(),
+            ]);
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
@@ -56,7 +60,7 @@ class TaskController extends Controller
     public function updateStatus(TaskRequest $request, Project $project, Task $task)
     {
         try {
-            $task->update(['status' => $request->status]);
+            $this->taskService->update($task->id, ['status' => $request->status]);
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
@@ -69,7 +73,11 @@ class TaskController extends Controller
      */
     public function destroy(DeleteTaskRequest $request)
     {
-        Task::query()->find($request->task_id)->delete();
-        return response()->json(['success' => true]);
+        try {
+            $this->taskService->delete($request->task_id);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

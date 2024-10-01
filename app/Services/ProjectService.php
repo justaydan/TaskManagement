@@ -23,4 +23,19 @@ class ProjectService
             'description' => $dto->getDescription()
         ]);
     }
+
+    public function getTasks(int $projectId)
+    {
+        return Project::query()->find($projectId)->load('tasks');
+    }
+
+    public function delete(int $projectId)
+    {
+        Project::query()->find($projectId)->delete();
+    }
+
+    public function findProject(int $projectId)
+    {
+        return Project::query()->find($projectId);
+    }
 }

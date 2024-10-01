@@ -19,13 +19,20 @@ class TaskService
         ]);
     }
 
-    public function update(TaskDto $dto)
+    public function update(int $taskId, array $data)
     {
-        Task::query()->find($dto->getTaskId())
-            ->update([
-                'name' => $dto->getName(),
-                'description' => $dto->getDescription(),
-            ]);
+        Task::query()->find($taskId)
+            ->update($data);
+    }
+
+    public function delete(int $taskId)
+    {
+        Task::query()->find($taskId)->delete();
+    }
+
+    public function get(int $taskId)
+    {
+        return Task::query()->find($taskId);
     }
 
 }

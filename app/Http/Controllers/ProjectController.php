@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrUpdateProjectRequest;
 use App\Http\Requests\EditOrDeleteProjectRequest;
-use App\Http\Requests\FetchTaskRequest;
-use App\Models\Project;
 use App\Services\ProjectService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -36,7 +34,7 @@ class ProjectController extends Controller
     {
         try {
             $this->projectService->store($request->toDto());
-            return response()->json(['success' => true]);
+            return response()->json(['success' => true], 201);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
@@ -49,7 +47,7 @@ class ProjectController extends Controller
      */
     public function edit(EditOrDeleteProjectRequest $request): JsonResponse
     {
-        return response()->json(Project::query()->find($request->id));
+        return response()->json($this->projectService->findProject($request->id));
     }
 
     /**
@@ -73,7 +71,7 @@ class ProjectController extends Controller
     public function destroy(EditOrDeleteProjectRequest $request): JsonResponse
     {
         try {
-            Project::query()->find($request->id)->delete();
+            $this->projectService->delete($request->id);
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
@@ -86,7 +84,7 @@ class ProjectController extends Controller
      */
     public function showTasks(EditOrDeleteProjectRequest $request): Factory|View|Application
     {
-        $project = Project::query()->find($request->id)->load('tasks');
+        $project = $this->projectService->getTasks($request->id);
         return view('projects.tasks', compact('project'));
     }
 }
